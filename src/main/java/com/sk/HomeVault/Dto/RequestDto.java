@@ -1,18 +1,19 @@
 package com.sk.HomeVault.Dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import org.antlr.v4.runtime.misc.NotNull;
 import org.springframework.stereotype.Component;
 
-@Component
+
 public class RequestDto {
 
-    @NotBlank
+    @NotBlank(message = "Item name is required")
     String itemName;
-    @NotBlank
+    @NotBlank(message = "Item Location is required")
     String itemLocation;
-    @NotBlank @Size(max = 500)
+    @NotBlank(message = "Description is required")
+    @Size(max = 500,message = "Description cannot exceeds 500 characters ")
     String itemDescription;
 
     public String getItemName() {
