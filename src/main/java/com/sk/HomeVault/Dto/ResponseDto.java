@@ -4,6 +4,16 @@ import java.time.LocalDateTime;
 
 public class ResponseDto {
 
+    Long itemId;
+
+    public Long getItemId() {
+        return itemId;
+    }
+
+    public void setItemId(Long itemId) {
+        this.itemId = itemId;
+    }
+
     String itemName;
     String itemLocation;
     String itemDescription;

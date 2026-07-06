@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.OptionalInt;
 
 @Service
 public class ItemService {
@@ -42,6 +43,7 @@ public class ItemService {
         responseDtoObject.setItemDescription(newItem.getItemDescription());
         responseDtoObject.setItemCreatedAt(newItem.getCreatedAt());
         responseDtoObject.setItemUpdatedAt(newItem.getUpdatedAt());
+        responseDtoObject.setItemId(newItem.getItemId());
 
         // saving item in db;
         itemRepository.save(newItem);
@@ -64,6 +66,7 @@ public class ItemService {
            responseDto.setItemDescription(item.getItemDescription());
            responseDto.setItemUpdatedAt(item.getUpdatedAt());
            responseDto.setItemCreatedAt(item.getCreatedAt());
+           responseDto.setItemId(item.getItemId());
            responseDtoList.add(responseDto);
         }
         return  responseDtoList ;
@@ -74,19 +77,62 @@ public class ItemService {
       Optional<Item> optionalItem = itemRepository.findById(id);
 
       if(optionalItem.isPresent()){
-      ResponseDto responseDto = new ResponseDto();
+        ResponseDto responseDto = new ResponseDto();
         Item existedItem= optionalItem.get();
+
         responseDto.setItemName(existedItem.getItemName());
         responseDto.setItemDescription(existedItem.getItemDescription());
         responseDto.setItemLocation(existedItem.getItemLocation());
         responseDto.setItemUpdatedAt(existedItem.getUpdatedAt());
         responseDto.setItemCreatedAt(existedItem.getCreatedAt());
+        responseDto.setItemId(existedItem.getItemId());
         return responseDto;
       }else{
           throw  new RuntimeException("Not Found");
       }
 
     }
+
+
+    public ResponseDto updateItem(RequestDto existedItem ,Long id){
+
+      Optional<Item> itemOptional =itemRepository.findById(id);
+      if(itemOptional.isPresent()){
+
+         Item dbItem =itemOptional.get();
+         ResponseDto responseDto=new ResponseDto();
+
+          dbItem.setItemLocation(existedItem.getItemLocation());
+          dbItem.setItemName(existedItem.getItemName());
+          dbItem.setItemDescription(existedItem.getItemDescription());
+
+          itemRepository.save(dbItem);
+
+          responseDto.setItemDescription(dbItem.getItemDescription());
+          responseDto.setItemLocation(dbItem.getItemLocation());
+          responseDto.setItemName(dbItem.getItemName());
+          responseDto.setItemId(dbItem.getItemId());
+          responseDto.setItemUpdatedAt(LocalDateTime.now());
+          responseDto.setItemCreatedAt(dbItem.getCreatedAt());
+
+          return responseDto;
+      }else{
+          throw new RuntimeException("Object Does not found"+id);
+      }
+
+    }
+
+    public void deleteItem(long id){
+         Optional<Item> itemOptional =itemRepository.findById(id);
+         if(itemOptional.isPresent()){
+           Item dbItem =itemOptional.get();
+           itemRepository.deleteById(dbItem.getItemId());
+           System.out.println("Reached");
+         }else{
+           throw  new RuntimeException("Item not found");
+         }
+    }
+
 
 
 }

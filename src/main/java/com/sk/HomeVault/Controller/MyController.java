@@ -19,21 +19,33 @@ public class MyController {
     @Autowired
     private ItemService itemService;
 
-    @PostMapping("/item")
+    @PostMapping("item")
     public ResponseEntity<ResponseDto> newItem(@Valid @RequestBody RequestDto requestDto){
         System.out.println("Controller reached");
     ResponseDto responseDto = itemService.addItem(requestDto);
      return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
-    @GetMapping("/items")
+    @GetMapping("items")
     public ResponseEntity<List<ResponseDto>> allItems(){
         return ResponseEntity.ok(itemService.allItems());
     }
 
-        @GetMapping("/item/{id}")
-        public ResponseEntity<ResponseDto> item(@PathVariable long id){
+        @GetMapping("item/{id}")
+        public ResponseEntity<ResponseDto> itemByid(@PathVariable long id){
           ResponseDto responseDto = itemService.itemById(id);
           return ResponseEntity.ok(responseDto);
+        }
+
+        @PutMapping("itemUpdate/{id}")
+        public ResponseEntity<ResponseDto> itemUpdate(@RequestBody RequestDto requestDto , @PathVariable long id ){
+                 ResponseDto responseDto =itemService.updateItem(requestDto,id);
+                 return ResponseEntity.ok(responseDto);
+        }
+
+        @DeleteMapping("delete/{id}")
+    public ResponseEntity<String> deleteItem(@PathVariable long id ){
+        itemService.deleteItem(id);
+       return ResponseEntity.noContent().build();
         }
     }
