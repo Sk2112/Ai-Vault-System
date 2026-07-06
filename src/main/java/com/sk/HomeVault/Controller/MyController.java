@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/vault/")
 public class MyController {
@@ -24,6 +26,14 @@ public class MyController {
      return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
+    @GetMapping("/items")
+    public ResponseEntity<List<ResponseDto>> allItems(){
+        return ResponseEntity.ok(itemService.allItems());
+    }
 
-
-}
+        @GetMapping("/item/{id}")
+        public ResponseEntity<ResponseDto> item(@PathVariable long id){
+          ResponseDto responseDto = itemService.itemById(id);
+          return ResponseEntity.ok(responseDto);
+        }
+    }
